@@ -1,6 +1,139 @@
 const Node = require('../src/node');
 
-describe('Node', () => {
+describe.skip('My Node', () => {
+	describe('Tests', () => {
+		let top1Node, top2Node, top3Node, top4Node, top5Node, top6Node, top7Node
+/*
+				1
+			   / \
+			  2   3
+			 / \
+			4   5
+		   / \
+		  6   7
+*/
+		beforeEach(() => {
+			top1Node = new Node(1, 1);
+			top2Node = new Node(2, 2);
+			top3Node = new Node(3, 3);
+			top4Node = new Node(4, 4);
+			top5Node = new Node(5, 5);
+			top6Node = new Node(6, 6);
+			top7Node = new Node(7, 7);
+			top8Node = new Node(8, 8);
+			top9Node = new Node(9, 9);
+
+			// Setup
+			top1Node.appendChild(top2Node);
+			top1Node.appendChild(top3Node);
+			top2Node.appendChild(top4Node);
+			top2Node.appendChild(top5Node);
+			top4Node.appendChild(top6Node);
+			top4Node.appendChild(top7Node);
+			top6Node.appendChild(top8Node);
+			top6Node.appendChild(top9Node);
+		});
+
+/*                                   
+				1                   2
+			   / \                 / \                    
+			  2   3               1   3                   
+			 / \        =>       / \        
+			4   5               4   5                     
+		   / \                 / \                        
+		  6   7               6   7  
+		 / \                 / \                     
+	    8   9               8   9
+*/
+		it('TestRoot', () => {
+			top2Node.swapWithParent();
+
+			// top2node
+			expect(top2Node.parent).to.equal(null);
+			expect(top2Node.left).to.equal(top1Node);
+			expect(top2Node.right).to.equal(top3Node);
+
+			// top1node
+			expect(top1Node.parent).to.equal(top2Node);
+			expect(top1Node.left).to.equal(top4Node);
+			expect(top1Node.right).to.equal(top5Node);
+
+			// top3node
+			expect(top4Node.parent).to.equal(top1Node);
+			expect(top4Node.left).to.equal(top6Node);
+			expect(top4Node.right).to.equal(top7Node);
+		});
+
+		/*                                   
+				1                   1
+			   / \                 / \                    
+			  2   3               4   3                   
+			 / \        =>       / \        
+			4   5               2   5                     
+		   / \                 / \                        
+		  6   7               6   7                       
+		 / \                 / \                     
+	    8   9               8   9
+		*/
+		it('TestMiddleNode', () => {
+			top4Node.swapWithParent();
+
+			// top1node
+			expect(top1Node.parent).to.equal(null);
+			expect(top1Node.left).to.equal(top4Node);
+			expect(top1Node.right).to.equal(top3Node);
+
+			// top4node
+			expect(top4Node.parent).to.equal(top1Node);
+			expect(top4Node.left).to.equal(top2Node);
+			expect(top4Node.right).to.equal(top5Node);
+
+			// top2Node
+			expect(top2Node.parent).to.equal(top4Node);
+			expect(top2Node.left).to.equal(top6Node);
+			expect(top2Node.right).to.equal(top7Node);
+
+			// top6Node
+			expect(top6Node.parent).to.equal(top2Node);
+			expect(top6Node.left).to.equal(top8Node);
+			expect(top6Node.right).to.equal(top9Node);
+		});
+
+		/*                                   
+				1                   1
+			   / \                 / \                    
+			  2   3               2   3                   
+			 / \        =>       / \        
+			4   5               4   5                     
+		   / \                 / \                        
+		  6   7               9   7                       
+		 / \                 / \                     
+	    8   9               8   6
+		*/
+		it('TestBottomNode', () => {
+			top9Node.swapWithParent();
+
+			// top4node
+			expect(top4Node.parent).to.equal(top2Node);
+			expect(top4Node.left).to.equal(top9Node);
+			expect(top4Node.right).to.equal(top7Node);
+
+			// top9Node
+			expect(top9Node.parent).to.equal(top4Node);
+			expect(top9Node.left).to.equal(top8Node);
+			expect(top9Node.right).to.equal(top6Node);			
+
+			// top8Node
+			expect(top8Node.parent).to.equal(top9Node);
+			expect(top8Node.left).to.equal(null);
+			expect(top8Node.right).to.equal(null);
+		});
+	})
+})
+
+
+
+describe.skip('Node', () => {
 	describe('#constructor', () => {
 		const node = new Node(42, 15);
 

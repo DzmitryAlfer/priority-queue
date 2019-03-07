@@ -39,6 +39,15 @@ class Node {
 		}
 	}
 
+	/*                                   
+				1                   2
+			   / \                 / \                    
+			  2   3               1   3                   
+			 / \        =>       / \        
+			4   5               4   5                     
+		   / \                 / \                        
+		  6   7               6   7                       
+*/
 	swapWithParent() {
 		const parent = this.parent;
 
@@ -51,7 +60,15 @@ class Node {
 		const tempRight = parent.right;
 
 		parent.left = this.left;
+		if(parent.left) {
+			parent.left.parent = parent;
+		}
+
 		parent.right = this.right;
+		if(parent.right) {
+			parent.right.parent = parent;
+		}
+
 		parent.parent = this;
 
 		if(tempLeft === this) {
@@ -81,26 +98,6 @@ class Node {
 				tempParent.right = this;
 			}
 		}
-		
-
-		/*const grandfather = parent.parent;
-
-		this.remove();
-
-		//const sibling = parent.left ? parent.left : parent.right;
-		
-		if(grandfather) {
-			grandfather.removeChild(parent);
-
-			grandfather.appendChild(this);
-		}
-
-		this.appendChild(parent);
-
-		if(sibling) {
-			parent.removeChild(sibling);
-			this.appendChild(sibling);
-		}*/
 	}
 }
 
