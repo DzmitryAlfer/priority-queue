@@ -23,7 +23,9 @@ class MaxHeap {
 
 		this.restoreRootFromLastInsertedNode(root);
 
-		return root;
+		this.shiftNodeDown(this.root);
+
+		return root.data;
 	}
 
 	detachRoot() {
@@ -56,6 +58,10 @@ class MaxHeap {
 	}
 
 	restoreRootFromLastInsertedNode(detached) {
+		if(this.parentNodes.length === 0) {
+			return;
+		}
+
 		if (this.parentNodes.length === 1) {
 			this.root = this.parentNodes[0];
 
@@ -96,6 +102,8 @@ class MaxHeap {
 		if (_lastInsertedNode.right === null) {
 			this.parentNodes.unshift(_lastInsertedNode);
 		}
+
+		this.root.parent = null;
 	}
 
 	
@@ -170,62 +178,38 @@ class MaxHeap {
 	}
 
 	shiftNodeDown(node) {
-		if(!node) {
+		if(!node || (!node.left && !node.right)) {
 			return;
 		}
 
-		if(node.left) {
-			const leftChild = node.left;
+		const biggestChild = !node.left 
+								? node.right
+								: !node.right
+									? node.left
+									: node.left.priority > node.right.priority
+										? node.left : node.right;
 
-			if(leftChild.priority > node.priority) {
-				const nodeIndex = this.parentNodes.findIndex(n => n === node);
-				const childIndex = this.parentNodes.findIndex(n => n === leftChild);
+		if (biggestChild.priority > node.priority) {
+			const nodeIndex = this.parentNodes.findIndex(n => n === node);
+			const childIndex = this.parentNodes.findIndex(n => n === biggestChild);
 
-				if (nodeIndex >= 0) {
-					this.parentNodes[nodeIndex] = leftChild;
-				}
-
-				if (childIndex >= 0) {
-					this.parentNodes[childIndex] = node;
-				}
-
-				leftChild.swapWithParent();
-
-				if (!leftChild.parent) {
-					this.root = leftChild;
-				}
-
-				this.shiftNodeDown(node);
-
-				return;
+			if (nodeIndex >= 0) {
+				this.parentNodes[nodeIndex] = biggestChild;
 			}
-		}
 
-		if(node.right) {
-			const rightChild = node.right;
-
-			if(rightChild.priority > node.priority) {
-				const nodeIndex = this.parentNodes.findIndex(n => n === node);
-				const childIndex = this.parentNodes.findIndex(n => n === rightChild);
-
-				if (nodeIndex >= 0) {
-					this.parentNodes[nodeIndex] = rightChild;
-				}
-
-				if (childIndex >= 0) {
-					this.parentNodes[childIndex] = node;
-				}
-
-				rightChild.swapWithParent();
-
-				if (!rightChild.parent) {
-					this.root = rightChild;
-				}
-
-				this.shiftNodeDown(node);
-
-				return;
+			if (childIndex >= 0) {
+				this.parentNodes[childIndex] = node;
 			}
+
+			biggestChild.swapWithParent();
+
+			if (!biggestChild.parent) {
+				this.root = biggestChild;
+			}
+
+			this.shiftNodeDown(node);
+
+			return;
 		}
 	}
 }
