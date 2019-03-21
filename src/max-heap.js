@@ -19,7 +19,11 @@ class MaxHeap {
 			return null;
 		}
 
-		
+		const root = this.detachRoot();
+
+		this.restoreRootFromLastInsertedNode(root);
+
+		return root;
 	}
 
 	detachRoot() {
@@ -187,6 +191,10 @@ class MaxHeap {
 
 				leftChild.swapWithParent();
 
+				if (!leftChild.parent) {
+					this.root = leftChild;
+				}
+
 				this.shiftNodeDown(node);
 
 				return;
@@ -209,6 +217,10 @@ class MaxHeap {
 				}
 
 				rightChild.swapWithParent();
+
+				if (!rightChild.parent) {
+					this.root = rightChild;
+				}
 
 				this.shiftNodeDown(node);
 
