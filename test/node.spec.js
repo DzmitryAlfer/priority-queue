@@ -1,6 +1,6 @@
 const Node = require('../src/node');
 
-describe.skip('My Node', () => {
+describe('My Node', () => {
 	describe('Tests', () => {
 		let top1Node, top2Node, top3Node, top4Node, top5Node, top6Node, top7Node
 /*
@@ -133,7 +133,7 @@ describe.skip('My Node', () => {
 
 
 
-describe.skip('Node', () => {
+describe('Node', () => {
 	describe('#constructor', () => {
 		const node = new Node(42, 15);
 
